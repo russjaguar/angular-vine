@@ -1,0 +1,30 @@
+#team-members{'ng-controller' => 'TeamMembersCtrl'}
+  %a{href: '{{$location.search({show: "Russ"})}}'} Show only Russ
+  %div{'ng-repeat' => '(teamName, members) in teamMembers'}
+    %h2 {{teamName}}
+    %ul
+      %li{'ng-repeat' => 'teamMember in members'}
+        %span{'ng-bind' => 'teamMember.name',
+          'focus-input' => true,
+          'ng-click' => 'toggleEditTeamMember(teamName, $index)',
+          'ng-hide' => 'teamMember.editing'}
+        %input{type: 'text', 'ng-show' => 'teamMember.editing',
+          'ng-model' => 'teamMember.name',
+          'ng-blur' => 'toggleEditTeamMember(teamName, $index)',
+          'blur-on-enter' => true}
+
+        %div.tasks
+          %span.task-count {{teamMember.tasks.length}}
+          %button{'ng-click' => 'addTask(teamName, $index)'} + Task
+
+          %ul
+            %li{'ng-repeat' => 'task in teamMember.tasks'}
+              %span{'ng-bind' => 'task.note',
+                'focus-input' => true,
+                'ng-click' => 'toggleEditTask(teamName, $parent.$index, $index)',
+                'ng-hide' => 'task.editing'}
+              %input{type: 'text', 'ng-show' => 'task.editing',
+                'ng-model' => 'task.note',
+                'ng-blur' => 'toggleEditTask(teamName, $parent.$index, $index)',
+                'blur-on-enter' => true}
+              %span{'ng-click' => 'removeTask(teamName, $parent.$index, $index)'} x
