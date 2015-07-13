@@ -13,5 +13,6 @@
 //= require jquery2
 //= require jquery_ujs
 //= require angular.min
+//= require dragular.min
 //= require angular_app
 //= require_tree ./controllers

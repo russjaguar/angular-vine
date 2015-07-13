@@ -1,5 +1,5 @@
 #team-members{'ng-controller' => 'TeamMembersCtrl'}
-  %a{href: '{{$location.search({show: "Russ"})}}'} Show only Russ
+  %a{href: '{{$scope.$location.search("show", "Russ")}}'} Show only Russ
   %div{'ng-repeat' => '(teamName, members) in teamMembers'}
     %h2 {{teamName}}
     %ul
@@ -13,18 +13,26 @@
           'ng-blur' => 'toggleEditTeamMember(teamName, $index)',
           'blur-on-enter' => true}
 
-        %div.tasks
-          %span.task-count {{teamMember.tasks.length}}
-          %button{'ng-click' => 'addTask(teamName, $index)'} + Task
+        
+        .projects
+          .project{'ng-repeat' => 'project in teamMember.projects'}
+            %span.handle #
+            %div {{project.name}}
+            %span.task-count {{teamMember.tasks.length}}
+            %button{'ng-click' => 'addTask(teamName, $index)'} + Task
 
-          %ul
-            %li{'ng-repeat' => 'task in teamMember.tasks'}
-              %span{'ng-bind' => 'task.note',
-                'focus-input' => true,
-                'ng-click' => 'toggleEditTask(teamName, $parent.$index, $index)',
-                'ng-hide' => 'task.editing'}
-              %input{type: 'text', 'ng-show' => 'task.editing',
-                'ng-model' => 'task.note',
-                'ng-blur' => 'toggleEditTask(teamName, $parent.$index, $index)',
-                'blur-on-enter' => true}
-              %span{'ng-click' => 'removeTask(teamName, $parent.$index, $index)'} x
+            %ul
+              %li{'ng-repeat' => 'task in project.tasks'}
+                %span{'ng-bind' => 'task.content',
+                  'focus-input' => true,
+                  'ng-click' => 'toggleEditTask(teamName, $parent.$parent.$index, $parent.$index)',
+                  'ng-hide' => 'task.editing'}
+                %input{type: 'text', 'ng-show' => 'task.editing',
+                  'ng-model' => 'task.content',
+                  'ng-blur' => 'toggleEditTask(teamName, $parent.$index, $index)',
+                  'blur-on-enter' => true}
+                
+                %span.actions
+                  - ['jd', 'ip', 'H', 'op', 'bi', 'done'].each do |state|
+                    %span{'ng-click' => 'setState(teamName, $parent.$index, $index, "#{state}")', 'ng-state-color' => true}= state
+                  %span{'ng-click' => 'removeTask(teamName, $parent.$index, $index)'} x

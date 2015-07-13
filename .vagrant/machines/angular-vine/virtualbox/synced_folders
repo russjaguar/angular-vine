@@ -1,0 +1,1 @@
+{"nfs":{"vagrant-root":{"id":"vagrant-root","nfs":17,"guestpath":"/vagrant","hostpath":"/Users/russ/repos/angular-vine","disabled":false,"type":"nfs","map_uid":501,"map_gid":20,"nfs_udp":true,"nfs_version":3,"uuid":"3405997786"}}}

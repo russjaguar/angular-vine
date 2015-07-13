@@ -1,1 +1,1 @@
-var AngularVine = angular.module('AngularVine', []);
+var AngularVine = angular.module('AngularVine', ['dragularModule']);

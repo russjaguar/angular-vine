@@ -1,20 +1,32 @@
-AngularVine.controller('TeamMembersCtrl', function($scope, $location) {
-  $('base').attr('href', '/team-members');
+AngularVine.controller('TeamMembersCtrl', ['$scope', '$location', 'dragularService', function($scope, $location, dragularService) {
+  $('base').attr('href', '/');
   $location.path('/team-members').search({show: 'all'});
-
+  
+  dragularService($('.projects'), {
+    moves: function (el, container, handle) {
+      return handle.className === 'handle';
+    }
+  });
+  
   $scope.teamMembers = [];
 
   // TODO build filtered URI, load data from store
 
   $scope.teamMembers = {
     'Developers': [
-      {name: 'Russ', projects: []},
-      {name: 'Justin', projects: []},
-      {name: 'Zach', projects: []}
-    ],
-    'Administrative': [
-      {name: 'Terry', projects: []},
-      {name: 'Linda', projects: []}
+      {id: 1, name: 'Russ', projects: [
+        {
+          id: 1,
+          name: 'Jaguar Vine',
+          tasks: [
+            {id: 1, user_id: 1, content: 'Note 1'},
+            {id: 2, user_id: 1, content: 'Note 2'},
+            {id: 3, user_id: 1, content: 'Note 3'},
+          ],
+          state: 'H'
+        },
+        {id: 2, name: 'Test Project', tasks: [], state: 'jd'}
+      ]}
     ]
   };
 
@@ -25,6 +37,10 @@ AngularVine.controller('TeamMembersCtrl', function($scope, $location) {
   $scope.removeTask = function(teamName, parentIndex, index) {
     $scope.teamMembers[teamName][parentIndex].tasks.splice(index, 1);
   };
+  
+  $scope.setState = function(teamName, parentIndex, index, newState) {
+    $scope.teamMembers[teamName][parentIndex].tasks[index].state = newState;
+  }
 
   $scope.toggleEditTeamMember = function(teamName, index) {
     $scope.teamMembers[teamName][index].editing = !$scope.teamMembers[teamName][index].editing;
@@ -33,7 +49,7 @@ AngularVine.controller('TeamMembersCtrl', function($scope, $location) {
   $scope.toggleEditTask = function(teamName, parentIndex, index) {
     $scope.teamMembers[teamName][parentIndex].tasks[index].editing = !$scope.teamMembers[teamName][parentIndex].tasks[index].editing;
   };
-});
+}]);
 
 AngularVine.directive('focusInput', function($timeout) {
   return {
@@ -59,4 +75,15 @@ AngularVine.directive('blurOnEnter', function($timeout) {
       });
     }
   };
+});
+
+AngularVine.directive('stateColor', function($timeout) {
+  return {
+    link: function(scope, element, attrs) {
+      $timeout(function() {
+        console.debug(scope);
+        element.addClass('state-color-');
+      });
+    }
+  }
 });
